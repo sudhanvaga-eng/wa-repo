@@ -4,8 +4,15 @@
 -- for policies/triggers (Postgres has no CREATE POLICY IF NOT EXISTS).
 -- ============================================================
 
--- Enable UUID extension
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- Enable UUID extension and ensure uuid_generate_v4 is available
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA extensions;
+
+CREATE OR REPLACE FUNCTION public.uuid_generate_v4()
+RETURNS uuid
+LANGUAGE sql
+AS $$
+  SELECT gen_random_uuid();
+$$;
 
 -- ============================================================
 -- PROFILES
